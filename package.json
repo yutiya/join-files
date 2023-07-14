@@ -1,0 +1,142 @@
+{
+  "name": "meone-join-files",
+  "displayName": "Join Files",
+  "description": "Join all files in the current workspace, selected folder or glob",
+  "icon": "icon.png",
+  "version": "1.0.0",
+  "publisher": "meone",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yutiya/join-files.git"
+  },
+  "engines": {
+    "vscode": "^1.54.0"
+  },
+  "galleryBanner": {
+    "color": "#009CFF",
+    "theme": "light"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onCommand:joinFiles.start.workspace",
+    "onCommand:joinFiles.start.workspaceFolder",
+    "onCommand:joinFiles.start.fromGlob"
+  ],
+  "main": "./out/extension",
+  "extensionDependencies": [
+    "vscode.git"
+  ],
+  "contributes": {
+    "configuration": [
+      {
+        "properties": {
+          "joinFiles.logLevel": {
+            "scope": "resource",
+            "type": "string",
+            "default": "debug",
+            "enum": [
+              "debug",
+              "info",
+              "warn",
+              "error"
+            ]
+          },
+          "joinFiles.extensionsToInclude": {
+            "scope": "resource",
+            "type": "string",
+            "description": "Glob pattern of file extensions to include"
+          },
+          "joinFiles.excludedFolders": {
+            "scope": "resource",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Comma seperated glob pattern of files to exclude",
+            "default": [
+              "node_modules",
+              ".vscode",
+              ".git",
+              "dist",
+              ".chrome"
+            ]
+          },
+          "joinFiles.excludePattern": {
+            "scope": "resource",
+            "type": "string",
+            "description": "Comma seperated glob pattern of files to exclude"
+          },
+          "joinFiles.inheritWorkspaceExcludedFiles": {
+            "scope": "resource",
+            "type": "boolean",
+            "description": "Determines if Join Files will inherit workspace excluded files",
+            "default": true
+          },
+          "joinFiles.runOrganizeImports": {
+            "scope": "resource",
+            "type": "boolean",
+            "description": "Whether or not to run 'Organize Imports' when formatting files",
+            "default": false
+          },
+          "joinFiles.useGitIgnore": {
+            "scope": "resource",
+            "type": "boolean",
+            "description": "If the workspace folder is a git repository, skips files that git ignores",
+            "default": true
+          }
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "joinFiles.start.workspace",
+        "title": "Start Join Files: Workspace"
+      },
+      {
+        "command": "joinFiles.start.workspaceFolder",
+        "title": "Start Join Files: This Folder",
+        "enablement": "explorerViewletVisible && filesExplorerFocus && explorerResourceIsFolder"
+      },
+      {
+        "command": "joinFiles.start.fromGlob",
+        "title": "Start Join Files: From Glob"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "explorerResourceIsFolder",
+          "command": "joinFiles.start.workspaceFolder",
+          "group": "navigation@-1"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "npm run lint && npm run clean && tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src/**/*.ts",
+    "clean": "rimraf out/*"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "@types/micromatch": "^4.0.2",
+    "@types/node": "^14.*",
+    "@types/vscode": "^1.54",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^7.31.0",
+    "jest": "^27.0.6",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.4",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "fdir": "^5.1.0",
+    "micromatch": "^4.0.4"
+  }
+}
